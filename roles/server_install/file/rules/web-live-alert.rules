@@ -1,0 +1,20 @@
+groups:
+- name: web 存活报警
+  rules:
+  - alert: web 界面存活报警
+    expr: probe_success == 0
+    for: 3m
+    labels:
+      source: web-live
+    annotations:
+      summary: " {{ $labels.instance }} not active"
+      description: "{{ $labels.instance }} 无法正常访问，请立即查看 "
+  - alert: nginx 程序存活报警
+    expr: nginx_process_number < 2
+    for: 3m
+    labels:
+      source: web-live
+    annotations:
+      summary: " {{ $labels.instance }} not active"
+      description: "{{ $labels.instance }} Nginx 停止，请立即查看 "
+    

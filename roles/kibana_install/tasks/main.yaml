@@ -1,0 +1,12 @@
+--- 
+- name: kibana 源文件分发
+  copy: src=/etc/ansible/roles/kibana_install/file/kibana-7.2.0-x86_64.rpm dest=/root/exporter/kibana-7.2.0-x86_64.rpm
+
+- name: kibana 安装
+  shell: yum -y install /root/exporter/kibana-7.2.0-x86_64.rpm
+
+- name: kibana yml 配置文件分发
+  template: src=/etc/ansible/roles/kibana_install/template/kibana.yml.j2 dest=/etc/kibana/kibana.yml
+
+- name: kibana 启动
+  service: name=kibana state=started enabled=yes daemon_reload=yes

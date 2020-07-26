@@ -1,0 +1,27 @@
+groups:
+- name: Kafka状态监控报警
+  rules:
+  - alert: Kafka 集群broker 存活警报
+    expr: kafka_brokers < 3
+    for: 3m
+    labels:
+      source: kafka
+    annotations:
+      summary: " {{ $labels.instance }} Kafka Cluster not active"
+      description: "{{ $labels.instance }} Kafka 集群broker停止，请立即查看"
+  - alert: Kafka lag 堆积警报
+    expr: kafka_consumergroup_lag{consumergroup="group1"} > 20
+    for: 3m
+    labels:
+      source: kafka
+    annotations:
+      summary: " {{ $labels.instance }} Kafka lag too big"
+      description: "{{ $labels.instance }} Kafka lag 堆积较多，请立即查看"
+  - alert: Kafka leader 警报
+    expr: kafka_topic_partition_leader == 0
+    for: 3m
+    labels:
+      source: kafka
+    annotations:
+      summary: " {{ $labels.instance }} Kafka not leader"
+      description: "{{ $labels.instance }} Kafka topic 没有leader，请立即查看" 

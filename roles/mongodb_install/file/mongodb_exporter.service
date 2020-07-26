@@ -1,0 +1,14 @@
+[Unit]
+Description=Mongodb Exporter
+After=network.target
+
+[Service]
+User=mongousr
+Group=mongousr
+Type=simple
+ExecStart=/usr/local/bin/mongodb_exporter \
+--mongodb.uri mongodb://mongodb_exporter:xxx@xxxx:27018,xxxx:27018,xxxx:27018,xxxx:27018 \
+--web.listen-address=:9001
+
+[Install]
+WantedBy=multi-user.target

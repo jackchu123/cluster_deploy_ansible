@@ -1,0 +1,15 @@
+--- 
+- name: elasticsearch 源文件分发
+  copy: src=/etc/ansible/roles/elasticsearch_install/file/elasticsearch-7.2.0-x86_64.rpm dest=/root/exporter/elasticsearch-7.2.0-x86_64.rpm
+
+- name: elasticsearch 安装
+  shell: yum -y install /root/exporter/elasticsearch-7.2.0-x86_64.rpm
+
+- name: elasticsearch yml 配置文件分发
+  template: src=/etc/ansible/roles/elasticsearch_install/template/elasticsearch.yml.j2 dest=/etc/elasticsearch/elasticsearch.yml
+
+- name: elasticsearch jvm 配置文件分发
+  copy: src=/etc/ansible/roles/elasticsearch_install/file/jvm.options dest=/etc/elasticsearch/jvm.options
+
+- name: elasticsearch 启动
+  service: name=elasticsearch state=started enabled=yes daemon_reload=yes

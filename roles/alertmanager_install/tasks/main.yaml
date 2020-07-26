@@ -1,0 +1,18 @@
+---
+- name: alert 源文件分发
+  copy: src=/etc/ansible/roles/alertmanager_install/file/alertmanager-0.17.0.linux-amd64.tar.gz dest=/root/exporter/alertmanager-0.17.0.linux-amd64.tar.gz
+
+- name: alert 安装
+  shell: tar zxf /root/exporter/alertmanager-0.17.0.linux-amd64.tar.gz -C /root/exporter && cp /root/exporter/alertmanager-0.17.0.linux-amd64/alertmanager /usr/local/bin/ && mkdir /etc/alertmanager && mkdir /var/lib/alertmanager && groupadd --system alertmanager && useradd -s /sbin/nologin --system -g alertmanager alertmanager
+
+- name: alert 配置文件分发
+  copy: src=/etc/ansible/roles/alertmanager_install/file/alertmanager.yml dest=/etc/alertmanager/alertmanager.yml
+
+- name: alert 启动文件分发
+  copy: src=/etc/ansible/roles/alertmanager_install/file/alertmanager.service dest=/etc/systemd/system/alertmanager.service
+
+- name: 启动权限分配
+  shell: chown -R alertmanager:alertmanager /etc/alertmanager && chown -R alertmanager:alertmanager /var/lib/alertmanager
+
+- name: alert 启动
+  service: name=alertmanager state=started enabled=yes daemon_reload=yes

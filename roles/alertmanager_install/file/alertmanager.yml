@@ -1,0 +1,56 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: ''
+  smtp_from: ''
+  smtp_auth_username: ''
+  smtp_auth_password: ''
+  smtp_require_tls: false
+
+templates:
+  - 'templates/*.html'
+
+route:
+  group_by: ['alertname']
+  group_wait: 10s
+  group_interval: 10s
+  repeat_interval: 3m
+  receiver: 'node-monitor'
+  routes:
+  - receiver: 'node-monitor'
+    group_wait: 10s
+    match_re:
+      source: node
+  - receiver: 'mongodb-monitor'
+    group_wait: 10s
+    match_re:
+      source: mongodb
+  - receiver: 'mongodb-cluster-monitor'
+    group_wait: 10s
+    match_re:
+      source: mongodb-cluster
+receivers:
+- name: 'node-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-node] 报警触发" }
+    send_resolved: true
+- name: 'mongodb-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-mongodb] 报警触发" }
+    send_resolved: true
+- name: 'mongodb-cluster-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-mongodb-cluster] 报警触发" }
+    send_resolved: true
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance','value','annotations']
+

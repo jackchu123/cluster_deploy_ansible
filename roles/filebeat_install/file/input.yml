@@ -1,0 +1,41 @@
+- type: log
+
+  # Change to true to enable this input configuration.
+  enabled: true
+
+  # Paths that should be crawled and fetched. Glob based paths.
+  paths:
+    - /var/log/messages
+    - /var/log/dmesg
+  scan_frequency: 10s  
+  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+  multiline.negate: true
+  multiline.match: after
+  multiline.Max_lines: 30
+  multiline.timeout: 5s
+
+- type: log
+
+  # Change to true to enable this input configuration.
+  enabled: true
+
+  # Paths that should be crawled and fetched. Glob based paths.
+  paths:
+    #- /home/suntech/log/gateway/gateway.log.2019-*
+    - /home/suntech/log/auth/*/*
+    - /home/suntech/log/base/*/*
+    - /home/suntech/log/fastdfs/*/*
+    - /home/suntech/log/gateway/*/*
+    - /home/suntech/log/goods/*/*
+    - /home/suntech/log/log/*/*
+    - /home/suntech/log/mail/*/*
+    - /home/suntech/log/privilege/*/*
+    - /home/suntech/log/tenant/*/*
+  scan_frequency: 10s
+  multiline.pattern: '^[0-9]{4}-[0-9]{2}-[0-9]{2}'
+  multiline.negate: true
+  multiline.match: after
+  multiline.Max_lines: 200
+  multiline.timeout: 5s
+  #include_lines: ['INFO']
+  

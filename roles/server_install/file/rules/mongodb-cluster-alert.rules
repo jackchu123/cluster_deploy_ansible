@@ -1,0 +1,28 @@
+groups:
+- name: Mongodb复制集群状态监控报警
+  rules:
+  - alert: cluster member 宕机
+    expr: mongodb_mongod_replset_member_health < 1
+    for: 1m
+    labels:
+      source: mongodb-cluster
+    annotations:
+      summary: " {{ $labels.instance }} is down"
+      description: "{{ $labels.instance }} 复制集节点宕机，请立即修复)"
+  - alert: cluster member复制集时间同步延迟
+    expr: rate(mongodb_mongod_replset_oplog_head_timestamp[5m]) > 2
+    for: 1m
+    labels:
+      source: mongodb-cluster
+    annotations:
+      summary: " {{ $labels.instance }} cluster member oplog date wait 2S"
+      description: "{{ $labels.instance }} 复制集节点oplog同步时间大于2S，请注意 (当前使用值: {{ $value }})"
+  - alert: cluster member复制集数据同步延迟
+    expr: mongodb_mongod_metrics_repl_buffer_size_bytes / mongodb_mongod_metrics_repl_buffer_max_size_bytes > 0.9
+    for: 1m
+    labels:
+      source: mongodb-cluster
+    annotations:
+      summary: " {{ $labels.instance }} cluster member oplog size wait"
+      description: "{{ $labels.instance }} 复制集节点oplog同步数据滞后，请注意 (当前使用值: {{ $value }})"
+

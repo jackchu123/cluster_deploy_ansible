@@ -1,0 +1,104 @@
+global:
+  resolve_timeout: 5m
+  smtp_smarthost: ''
+  smtp_from: ''
+  smtp_auth_username: ''
+  smtp_auth_password: ''
+  smtp_require_tls: false
+
+templates:
+  - 'templates/*.html'
+
+route:
+  group_by: ['alertname']
+  group_wait: 1m
+  group_interval: 10s
+  repeat_interval: 10m
+  receiver: 'node-monitor'
+  routes:
+  - receiver: 'node-monitor'
+    group_wait: 10s
+    match_re:
+      source: node
+  - receiver: 'mongodb-monitor'
+    group_wait: 10s
+    match_re:
+      source: mongodb
+  - receiver: 'mongodb-cluster-monitor'
+    group_wait: 10s
+    match_re:
+      source: mongodb-cluster
+  - receiver: 'web-live-monitor'
+    group_wait: 10s
+    match_re:
+      source: web-live
+  - receiver: 'mysql-monitor'
+    group_wait: 10s
+    match_re:
+      source: mysql
+  - receiver: 'redis-monitor'
+    group_wait: 10s
+    match_re:
+      source: redis
+  - receiver: 'kafka-monitor'
+    group_wait: 10s
+    match_re:
+      source: kafka
+receivers:
+- name: 'node-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-node] 报警触发" }
+    send_resolved: true
+- name: 'mongodb-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-mongodb] 报警触发" }
+    send_resolved: true
+- name: 'mongodb-cluster-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-mongodb-cluster] 报警触发" }
+    send_resolved: true
+- name: 'web-live-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-web-live] 报警触发" }
+    send_resolved: true
+  - to: 'caofeng@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-web-live] 报警触发" }
+    send_resolved: true
+  - to: 'shenghaoyang@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-web-live] 报警触发" }
+    send_resolved: true
+- name: 'mysql-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-mysql] 报警触发" }
+    send_resolved: true
+- name: 'redis-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-redis] 报警触发" }
+    send_resolved: true
+- name: 'kafka-monitor'
+  email_configs:
+  - to: 'chuweiqi@sun-tech.cn'
+    html: '{{ template "mail.html" . }}'
+    headers: { Subject: "[WARN-kafka] 报警触发" }
+    send_resolved: true
+inhibit_rules:
+  - source_match:
+      severity: 'critical'
+    target_match:
+      severity: 'warning'
+    equal: ['alertname', 'dev', 'instance','value','annotations']
+

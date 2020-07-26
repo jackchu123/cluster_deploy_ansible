@@ -1,0 +1,16 @@
+---
+- name: 源文件目录创建
+ shell: mkdir -p /home/prometheus_key/
+
+- name: 监控脚本分发
+  copy: src=/etc/ansible/roles/scripts_install/file/cloud_runner dest=/home/prometheus_key/cloud_runner
+
+- name: 监控脚本定时任务
+  #shell: chmod +x /home/prometheus_key/key_runner && chown -R nodeusr:nodeusr /home/prometheus_key/ && crontab -l > conf && echo "*/2 * * * * /usr/bin/bash /home/prometheus_key/key_runner >/dev/null 2>&1" >> conf && crontab conf && rm -f conf
+  shell: chmod +x /home/prometheus_key/cloud_runner && chown -R nodeusr:nodeusr /home/prometheus_key/ && crontab -l > conf && echo "*/2 * * * * /usr/bin/bash /home/prometheus_key/cloud_runner >/dev/null 2>&1" >> conf && crontab conf && rm -f conf
+
+- name: node_exporter 启动程序修改
+  copy: src=/etc/ansible/roles/scripts_install/file/node_exporter.service dest=/etc/systemd/system/node_exporter.service
+
+- name: node_exporter 启动
+  service: name=node_exporter state=restarted enabled=yes daemon_reload=yes

@@ -1,0 +1,57 @@
+# This is the default ansible 'hosts' file
+
+[pro-server]
+#192.168.1.101 name=pro-monitor001
+
+[pro-client]
+#192.168.1.101 name=pro-monitor001
+
+[pro-all:children]
+pro-server
+pro-client
+
+[exporter-mysql]
+#192.168.1.101 name=pro-monitor001
+
+[exporter-redis]
+#192.168.1.101 name=pro-monitor001
+
+[exporter-mongodb]
+#192.168.1.101 name=pro-monitor001
+
+[exporter-tomcat]
+#192.168.1.101 name=pro-monitor001
+
+[pro-pushgateway]
+#192.168.1.101 name=pro-monitor001
+
+[pro_pushgateway_client]
+#192.168.1.101 name=pro-monitor001
+
+[exporter-blackbox]
+#192.168.1.101 name=pro-monitor001
+
+[exporter-scripts]
+#192.168.1.101 name=pro-monitor001
+
+[exporter-kafka]
+#192.168.1.101 name=pro-monitor001
+
+[filebeat_node]
+#192.168.1.101 name=pro-monitor001
+
+[logstash_node]
+#192.168.1.101 name=pro-monitor001
+
+
+[elasticsearch_node]
+#192.168.1.101 name=pro-monitor001
+
+[kibana_node]
+#192.168.1.101 name=pro-monitor001
+
+[all:vars]
+VIP=192.168.1.101
+k_VIP=192.168.1.101
+l_VIP=192.168.1.101
+Kafka_ip=192.168.1.101

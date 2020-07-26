@@ -1,0 +1,15 @@
+---
+- name: mysql_exporter 源文件分发
+ copy: src=/etc/ansible/roles/mysql_install/file/mysqld_exporter-0.11.0.linux-amd64.tar.gz dest=/root/exporter/mysqld_exporter-0.11.0.linux-amd64.tar.gz
+
+- name: mysql_exporter 安装
+ shell: tar zxf /root/exporter/mysqld_exporter-0.11.0.linux-amd64.tar.gz -C /root/exporter && cp /root/exporter/mysqld_exporter-0.11.0.linux-amd64/mysqld_exporter /usr/local/bin/ && sudo chmod +x /usr/local/bin/mysqld_exporter 
+
+- name: mysql_exporter 配置文件分发
+ copy: src=/etc/ansible/roles/mysql_install/file/.mysqld_exporter.cnf dest=/etc/.mysqld_exporter.cnf
+
+- name: mysql_exporter 启动文件分发
+  copy: src=/etc/ansible/roles/mysql_install/file/mysql_exporter.service dest=/etc/systemd/system/mysql_exporter.service
+
+- name: 启动mysql_exporter
+  shell: chown root:prometheus /etc/.mysqld_exporter.cnf && systemctl daemon-reload && systemctl restart mysql_exporter && systemctl enable mysql_exporter

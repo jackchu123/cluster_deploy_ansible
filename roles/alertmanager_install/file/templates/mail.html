@@ -1,0 +1,21 @@
+{{ define "mail.html" }}
+<p>Hi All</p>
+<p>&nbsp;&nbsp;出现WARN报警信息，请注意</p>
+<table border="1">
+        <tr>
+                <td align="center">报警项</td>
+                <td align="center">报警服务器</td>
+                <td align="center">报警描述</td>
+                <td align="center">开始时间</td>
+        </tr>
+        {{ range $i, $alert := .Alerts }}
+                <tr>
+                        <td>{{ index $alert.Labels "alertname" }}</td>
+                        <td>{{ index $alert.Labels "instance" }}</td>
+                        <td>{{ index $alert.Annotations "description" }}</td>
+                        <td>{{ $alert.StartsAt }}</td>
+                </tr>
+        {{ end }}
+</table>
+<p>具体信息请点击http://192.168.1.131:3000，选择对应监控项，并解决问题</p>
+{{ end }}

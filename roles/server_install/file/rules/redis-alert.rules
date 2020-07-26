@@ -1,0 +1,11 @@
+groups:
+- name: Redis状态监控报警
+  rules:
+  - alert: Redis 存活警报
+    expr: redis_up == 0
+    for: 3m
+    labels:
+      source: redis
+    annotations:
+      summary: " {{ $labels.instance }} Redis not active"
+      description: "{{ $labels.instance }} Redis进程停止，请立即查看"

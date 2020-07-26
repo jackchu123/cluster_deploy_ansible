@@ -1,0 +1,12 @@
+---
+- name: blackbox_exporter 源文件分发
+ copy: src=/etc/ansible/roles/blackbox_install/file/blackbox_exporter-0.15.1.linux-amd64.tar.gz dest=/root/exporter/blackbox_exporter-0.15.1.linux-amd64.tar.gz
+
+- name: blackbox_exporter 安装
+  shell: tar zxf /root/exporter/blackbox_exporter-0.15.1.linux-amd64.tar.gz -C /root/exporter && cp /root/exporter/blackbox_exporter-0.15.1.linux-amd64/blackbox_exporter /usr/local/bin/ && mkdir -p /etc/blackbox/ && cp /root/exporter/blackbox_exporter-0.15.1.linux-amd64/blackbox.yml /etc/blackbox/ && useradd -rs /bin/false blackbox
+
+- name: blackbox_exporter 启动文件分发
+  copy: src=/etc/ansible/roles/blackbox_install/file/blackbox_exporter.service dest=/etc/systemd/system/blackbox_exporter.service
+
+- name: blackbox_exporter 启动
+  service: name=blackbox_exporter state=started enabled=yes daemon_reload=yes

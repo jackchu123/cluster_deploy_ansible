@@ -1,0 +1,35 @@
+#!/bin/bash
+#
+for i in 9100 9104 9121 8100 9001
+do
+    if [ $i -eq 9100 ]
+    then
+        curl localhost:$i/metrics > /root/exporter/pushgateway/pushgate_html/node.html
+        [ $? -ne 0 ] && rm -f /root/exporter/pushgateway/pushgate_html/node.html
+        [ -f /root/exporter/pushgateway/pushgate_html/node.html ] && cat /root/exporter/pushgateway/pushgate_html/node.html | curl --data-binary @- http://{{VIP}}:9091/metrics/job/prometheus_node/instance/{{name}}
+    fi
+    if [ $i -eq 9104 ]
+    then
+        curl localhost:$i/metrics > /root/exporter/pushgateway/pushgate_html/mysql.html
+        [ $? -ne 0 ] && rm -f /root/exporter/pushgateway/pushgate_html/mysql.html
+        [ -f /root/exporter/pushgateway/pushgate_html/mysql.html ] && cat /root/exporter/pushgateway/pushgate_html/mysql.html | curl --data-binary @- http://{{VIP}}:9091/metrics/job/prometheus_mysql/instance/{{name}}
+    fi
+    if [ $i -eq 9121 ]
+    then
+        curl localhost:$i/metrics > /root/exporter/pushgateway/pushgate_html/redis.html
+        [ $? -ne 0 ] && rm -f /root/exporter/pushgateway/pushgate_html/redis.html
+        [ -f /root/exporter/pushgateway/pushgate_html/redis.html ] && cat /root/exporter/pushgateway/pushgate_html/redis.html | curl --data-binary @- http://{{VIP}}:9091/metrics/job/prometheus_redis/instance/{{name}}
+    fi
+    if [ $i -eq 8100 ]
+    then
+        curl localhost:$i/metrics > /root/exporter/pushgateway/pushgate_html/tomcat.html
+        [ $? -ne 0 ] && rm -f /root/exporter/pushgateway/pushgate_html/tomcat.html
+        [ -f /root/exporter/pushgateway/pushgate_html/tomcat.html ] && cat /root/exporter/pushgateway/pushgate_html/tomcat.html | curl --data-binary @- http://{{VIP}}:9091/metrics/job/prometheus_tomcat/instance/{{name}}
+    fi
+    if [ $i -eq 9001 ]
+    then
+        curl localhost:$i/metrics > /root/exporter/pushgateway/pushgate_html/mongodb.html
+        [ $? -ne 0 ] && rm -f /root/exporter/pushgateway/pushgate_html/mongodb.html
+        [ -f /root/exporter/pushgateway/pushgate_html/mongodb.html ] && cat /root/exporter/pushgateway/pushgate_html/mongodb.html | curl --data-binary @- http://{{VIP}}:9091/metrics/job/prometheus_mongodb/instance/{{name}}
+    fi
+done

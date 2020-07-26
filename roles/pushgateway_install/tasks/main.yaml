@@ -1,0 +1,12 @@
+---
+- name: pushgateway 源文件分发
+  copy: src=/etc/ansible/roles/pushgateway_install/file/pushgateway-0.8.0.linux-amd64.tar.gz dest=/root/exporter/pushgateway-0.8.0.linux-amd64.tar.gz
+
+- name: pushgateway 安装
+  shell: tar zxf /root/exporter/pushgateway-0.8.0.linux-amd64.tar.gz -C /root/exporter && cp /root/exporter/pushgateway-0.8.0.linux-amd64/pushgateway /usr/local/bin/ && useradd -rs /bin/false pgwusr && mkdir -p /var/lib/pushgateway/ && touch /var/lib/pushgateway/push_file && chown -R pgwusr:pgwusr /var/lib/pushgateway/
+
+- name: pushgateway 启动文件分发
+  copy: src=/etc/ansible/roles/pushgateway_install/file/pushgateway.service dest=/etc/systemd/system/pushgateway.service
+
+- name: pushgateway 启动
+  service: name=pushgateway state=started enabled=yes daemon_reload=yes

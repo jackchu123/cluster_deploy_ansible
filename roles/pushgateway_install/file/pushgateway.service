@@ -1,0 +1,15 @@
+[Unit]
+Description=pushgateway Exporter
+After=network.target
+
+[Service]
+User=pgwusr
+Group=pgwusr
+Type=simple
+ExecStart=/usr/local/bin/pushgateway \
+--persistence.interval=60m \
+--persistence.file=/var/lib/pushgateway/push_file
+
+[Install]
+WantedBy=multi-user.target
+

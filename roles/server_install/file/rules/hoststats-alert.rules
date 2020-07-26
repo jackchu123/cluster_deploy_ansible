@@ -1,0 +1,43 @@
+groups:
+- name: 主机状态监控报警
+  rules:
+  - alert: 系统负载
+    expr: node_load5{job="prometheus_node"} > 6
+    for: 5m
+    labels:
+      source: node
+    annotations:
+      summary: "Instance {{ $labels.instance }} Node load high"
+      description: "{{ $labels.instance }} 系统负载过大 (当前使用值: {{ $value }})"
+  - alert: 内存使用率
+    expr: (node_memory_MemTotal_bytes{job="prometheus_node"} - node_memory_MemAvailable_bytes{job="prometheus_node"})/node_memory_MemTotal_bytes{job="prometheus_node"} > 0.90
+    for: 1m
+    labels:
+      source: node
+    annotations:
+      summary: "Instance {{ $labels.instance }} MEM usgae high"
+      description: "{{ $labels.instance }} 内存使用率超过 90% (当前使用值: {{ $value }})"
+  - alert: 磁盘容量
+    expr: 100-(node_filesystem_free_bytes{fstype=~"ext4|xfs"}/node_filesystem_size_bytes {fstype=~"ext4|xfs"}*100) > 90
+    for: 1m
+    labels:
+      source: node
+    annotations:
+      summary: "Instance {{ $labels.instance }} Disk usgae high"
+      description: "{{ $labels.instance }} 磁盘使用率超过 90% (当前使用值: {{ $value }})"
+  - alert: 磁盘I/O
+    expr: rate(node_disk_io_time_seconds_total{job="prometheus_node"}[5m]) * 100 > 95
+    for: 1m
+    labels:
+      source: node
+    annotations:
+      summary: "Instance {{ $labels.instance }} IPOS high"
+      description: "{{ $labels.instance }} IOPS超过 95% (当前使用值: {{ $value }})"
+  #- alert: 网络流量
+  #  expr: rate(node_network_receive_bytes_total{job="prometheus_node",device!~'tap.*|veth.*|br.*|docker.*|virbr*|lo*'}[5m]) /100 > 10240
+  #  for: 1m
+  #  labels:
+  #    source: node
+  #  annotations:
+  #    summary: "Instance {{ $labels.instance }} Network Flow high"
+  #    description: "{{ $labels.instance }} 网络Input流量超过 10M (当前使用值: {{ $value }})"

@@ -1,0 +1,34 @@
+#!/bin/bash
+# Scripts exporter
+
+# config
+STATUS_UP="UP"
+echo "# HELP Cloud process port, if port < 1 ,cloud server is down" > ./key/cloud_server.prom
+# server1 
+for i in {3500,3510,3520,3430,3440,3400,3420,3100,3450,3460,3490,3410,3470}
+do
+    RESULT=$(curl -s http://172.18.185.244:$i/actuator/health)
+    if [[ $RESULT == *$STATUS_UP* ]]
+    then
+        echo "cloud_process_port_$i 1"  >> ./key/cloud_server.prom
+    else
+	echo "cloud_process_port_$i 0"  >> ./key/cloud_server.prom
+    fi	
+done
+# server2
+for i in {3501,3511,3521,3431,3441,3401,3421,3101,3451,3461,3411,3471}
+do
+    RESULT=$(curl -s http://172.18.185.243:$i/actuator/health)
+    if [[ $RESULT == *$STATUS_UP* ]]
+    then
+        echo "cloud_process_port_$i 1"  >> ./key/cloud_server.prom
+    else
+	echo "cloud_process_port_$i 0"  >> ./key/cloud_server.prom
+    fi	
+done
+# eureka
+#echo "# HELP eureka instance status, if status == down ,eureka instance is down" > ./key/eureka_status.prom
+#while read line
+#do
+#    echo $line >> ./key/eureka_status.prom
+#done < /tmp/eureka_status

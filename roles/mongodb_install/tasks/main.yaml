@@ -1,0 +1,12 @@
+---
+- name: mongodb_exporter 源文件分发
+ copy: src=/etc/ansible/roles/mongodb_install/file/mongodb_exporter_v1.0.0.linux-amd64.tar.gz dest=/root/exporter/mongodb_exporter_v1.0.0.linux-amd64.tar.gz
+
+- name: mongodb_exporter 安装
+ shell: tar zxf /root/exporter/mongodb_exporter_v1.0.0.linux-amd64.tar.gz -C /root/exporter && cp /root/exporter/mongodb_exporter /usr/local/bin/ && useradd -rs /bin/false mongousr
+
+- name: mongodb_exporter 启动文件分发
+ copy: src=/etc/ansible/roles/mongodb_install/file/mongodb_exporter.service dest=/etc/systemd/system/mongodb_exporter.service
+
+- name: mongodb_exporter 启动
+  service: name=mongodb_exporter state=started enabled=yes daemon_reload=yes

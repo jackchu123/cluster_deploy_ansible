@@ -1,0 +1,15 @@
+--- 
+- name: 源文件目录创建
+  shell: mkdir -p /root/exporter
+
+- name: node_exporter 源文件分发
+  copy: src=/etc/ansible/roles/node_install/file/node_exporter-0.18.1.linux-amd64.tar.gz dest=/root/exporter/node_exporter-0.18.1.linux-amd64.tar.gz
+
+- name: node_exporter 安装
+  shell: tar zxf /root/exporter/node_exporter-0.18.1.linux-amd64.tar.gz -C /root/exporter/ && cp /root/exporter/node_exporter-0.18.1.linux-amd64/node_exporter /usr/local/bin/ && useradd -rs /bin/false nodeusr && groupadd --system prometheus && useradd -s /sbin/nologin --system -g prometheus prometheus
+
+- name: node_exporter 启动文件分发
+  copy: src=/etc/ansible/roles/node_install/file/node_exporter.service dest=/etc/systemd/system/node_exporter.service
+
+- name: node_exporter 启动
+  service: name=node_exporter state=started enabled=yes daemon_reload=yes

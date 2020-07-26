@@ -1,0 +1,13 @@
+[Unit]
+Description=Redis Exporter
+After=network.target
+
+[Service]
+User=redisusr
+Group=redisusr
+Type=simple
+ExecStart=/usr/local/bin/redis_exporter \
+-redis.password xxx
+
+[Install]
+WantedBy=multi-user.target

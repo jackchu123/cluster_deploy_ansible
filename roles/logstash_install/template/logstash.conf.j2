@@ -1,0 +1,64 @@
+# Sample Logstash configuration for creating a simple
+# Beats -> Logstash -> Elasticsearch pipeline.
+
+input {
+  beats {
+    port => 5044
+    ssl  => false
+    client_inactivity_timeout => "1200"
+    type => "log"
+    codec => plain {
+          charset => "UTF-8"
+    }
+  }
+  beats {
+    port => 5043
+    ssl  => false
+    client_inactivity_timeout => "1200"
+    type => "cloud_log"
+  }
+}
+
+filter {
+  if [type] == "cloud_log" {
+    #grok {
+    #  match => { "message" => "(?<startMsg>(content).*?(?=entityId))" }
+    #}
+    grok {
+      #match => { "message" => "(?<endMsg>(entityId).*?(?=}))" }
+      match => { "message" => "(?<endMsg>({).*?(.*))" }
+    }
+    json {
+      source => "endMsg"
+    }
+    mutate {
+      remove_field =>["message"]
+      remove_field =>["tags"]
+      remove_field =>["agent"]
+      remove_field =>["host"]
+      remove_field =>["cloud"]
+      remove_field =>["endMsg"]
+    }
+  }
+}
+
+output {
+  if [type] == "cloud_log"{
+    elasticsearch {
+      hosts => ["http://{{k_VIP}}:9200"]
+      index => "audit_log"
+      manage_template => true
+      template => "/etc/logstash/conf.d/template/audit_log.json"
+      template_name => "audit_log"
+      template_overwrite => true
+    }
+  } 
+  if [type] == "log" {
+    elasticsearch {
+      hosts => ["http://XXX:9200"]
+      index => "%{[@metadata][beat]}-%{[@metadata][version]}-%{+YYYY.MM.dd}"
+      #user => "elastic"
+      #password => "changeme"
+    }
+  }
+}

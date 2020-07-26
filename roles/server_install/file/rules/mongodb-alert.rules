@@ -1,0 +1,28 @@
+groups:
+- name: Mongodb状态监控报警
+  rules:
+  - alert: open file使用率	
+    expr: (process_open_fds{job="prometheus_mongodb"} / process_max_fds{job="prometheus_mongodb"})*100 > 90
+    for: 1m
+    labels:
+      source: mongodb
+    annotations:
+      summary: " {{ $labels.instance }} process open file high"
+      description: "{{ $labels.instance }} mongodb进程open file使用率超过90% (当前使用值: {{ $value }})"
+  - alert: 全局等待锁时间
+    expr: mongodb_mongod_locks_time_acquiring_global_microseconds_total / 1000000 > 3
+    for: 1m
+    labels:
+      source: mongodb
+    annotations:
+      summary: " {{ $labels.instance }} globallock time high"
+      description: "{{ $labels.instance }} mongodb进程global lock时间大于3S (当前使用值: {{ $value }})"
+  - alert: transactions值
+    expr: mongodb_mongod_wiredtiger_concurrent_transactions_available_tickets{type="read"} < 1
+    for: 1m
+    labels:
+      source: mongodb
+    annotations:
+      summary: " {{ $labels.instance }} transactions too small"
+      description: "{{ $labels.instance }} mongodb进程写事务值即将耗尽 (当前使用值: {{ $value }})"
+

@@ -1,0 +1,14 @@
+[Unit]
+Description=Kafka Exporter
+After=network.target
+
+[Service]
+User=kafkausr
+Group=kafkausr
+Type=simple
+ExecStart=/usr/local/bin/kafka_exporter \
+--kafka.server={{Kafka_ip}}:9092 \
+--log.level=warn
+
+[Install]
+WantedBy=multi-user.target

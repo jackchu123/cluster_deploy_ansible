@@ -1,0 +1,10 @@
+---
+- name: client数据存储
+  shell: mkdir -p /root/exporter/pushgateway/pushgate_html
+
+- name: cron 脚本分发
+  template: src=/etc/ansible/roles/pushgateway_client_install/template/push_html.sh.j2 dest=/root/exporter/pushgateway/push_html.sh
+
+- name: cron 添加
+  shell: chmod +x /root/exporter/pushgateway/push_html.sh && crontab -l > conf && echo "*/2 * * * * /usr/bin/bash /root/exporter/pushgateway/push_html.sh >/dev/null 2>&1" >> conf && crontab conf && rm -f conf
+

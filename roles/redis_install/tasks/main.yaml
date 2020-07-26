@@ -1,0 +1,12 @@
+---
+- name: redis_exporter 源文件分发
+  copy: src=/etc/ansible/roles/redis_install/file/redis_exporter-v1.0.3.linux-amd64.tar.gz dest=/root/exporter/redis_exporter-v1.0.3.linux-amd64.tar.gz
+
+- name: redis_exporter 安装
+  shell: tar zxf /root/exporter/redis_exporter-v1.0.3.linux-amd64.tar.gz -C /root/exporter && cp /root/exporter/redis_exporter-v1.0.3.linux-amd64/redis_exporter /usr/local/bin/ && useradd -rs /bin/false redisusr 
+
+- name: redis_exporter 启动文件分发
+  copy: src=/etc/ansible/roles/redis_install/file/redis_exporter.service dest=/etc/systemd/system/redis_exporter.service
+
+- name: redis_exporter 启动
+  service: name=redis_exporter state=started enabled=yes daemon_reload=yes

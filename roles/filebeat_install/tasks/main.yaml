@@ -1,0 +1,15 @@
+--- 
+- name: filebeat 源文件分发
+  copy: src=/etc/ansible/roles/filebeat_install/file/filebeat-7.2.0-x86_64.rpm dest=/root/exporter/filebeat-7.2.0-x86_64.rpm
+
+- name: filebeat 安装
+  shell: yum -y install /root/exporter/filebeat-7.2.0-x86_64.rpm
+
+- name: filebeat 配置文件分发
+  template: src=/etc/ansible/roles/filebeat_install/template/filebeat.yml.j2 dest=/etc/filebeat/filebeat.yml
+
+- name: filebeat 日志收集文件分发
+  copy: src=/etc/ansible/roles/filebeat_install/file/input.yml dest=/etc/filebeat/input.yml
+
+- name: filebeat 启动
+  service: name=filebeat state=started enabled=yes daemon_reload=yes

@@ -1,0 +1,11 @@
+groups:
+- name: Mysql状态监控报警
+  rules:
+  - alert: Mysql 存活警报
+    expr: mysql_up == 0
+    for: 3m
+    labels:
+      source: mysql
+    annotations:
+      summary: " {{ $labels.instance }} Mysql not active"
+      description: "{{ $labels.instance }} Mysql进程停止，请立即查看"

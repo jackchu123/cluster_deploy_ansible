@@ -1,0 +1,13 @@
+#!/bin/bash
+# Scripts exporter
+
+# config
+exporter_check=`ps -ef|grep -w nginx|grep -v grep|wc -l`
+# nginx
+echo "# HELP Nginx process number, if number < 1 ,nginx is down" > /home/prometheus_key/nginx.prom
+echo "nginx_process_number $exporter_check" >> /home/prometheus_key/nginx.prom
+
+# permission
+chown -R nodeusr:nodeusr /home/prometheus_key/
+
+

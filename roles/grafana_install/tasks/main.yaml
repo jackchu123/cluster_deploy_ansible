@@ -1,0 +1,15 @@
+---
+- name: grafana 源文件分发
+  copy: src=/etc/ansible/roles/grafana_install/file/grafana-6.2.5-1.x86_64.rpm dest=/root/exporter/grafana-6.2.5-1.x86_64.rpm
+
+- name: grafana 安装
+  shell: yum -y install /root/exporter/grafana-6.2.5-1.x86_64.rpm
+
+- name: grafana 启动
+  service: name=grafana-server state=started enabled=yes 
+
+- name: grafana 饼图插件安装
+  shell: grafana-cli plugins install grafana-piechart-panel
+
+- name: grafana 重启
+  service: name=grafana-server state=restarted

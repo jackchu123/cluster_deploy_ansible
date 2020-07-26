@@ -1,0 +1,18 @@
+--- 
+- name: server_exporter 源文件分发
+ copy: src=/etc/ansible/roles/server_install/file/prometheus-2.10.0.linux-amd64.tar.gz dest=/root/exporter/prometheus-2.10.0.linux-amd64.tar.gz
+
+- name: server_exporter 安装
+ shell: tar zxf /root/exporter/prometheus-2.10.0.linux-amd64.tar.gz -C /root/exporter && cp /root/exporter/prometheus-2.10.0.linux-amd64/prometheus /usr/local/bin/ && cp /root/exporter/prometheus-2.10.0.linux-amd64/promtool /usr/local/bin/ && mkdir /etc/prometheus && mkdir /var/lib/prometheus && chown prometheus:prometheus /var/lib/prometheus && chown prometheus:prometheus /usr/local/bin/prometheus && chown prometheus:prometheus /usr/local/bin/promtool && cp -r /root/exporter/prometheus-2.10.0.linux-amd64/console_libraries /etc/prometheus/ && cp -r /root/exporter/prometheus-2.10.0.linux-amd64/consoles /etc/prometheus/  && cp -r /etc/ansible/roles/server_install/file/rules /etc/prometheus/
+
+- name: 启动文件分发
+  copy: src=/etc/ansible/roles/server_install/file/prometheus.service dest=/etc/systemd/system/prometheus.service
+
+- name: 配置文件分发
+  copy: src=/etc/ansible/roles/server_install/file/prometheus.yml dest=/etc/prometheus/prometheus.yml
+
+- name: 权限配置
+  shell: chown -R prometheus:prometheus /etc/prometheus/ 
+
+- name: server_exporter 启动
+  service: name=prometheus state=started enabled=yes daemon_reload=yes

@@ -1,0 +1,45 @@
+---
+- hosts: exporter-mysql
+ roles:
+ - { role: mysql_install }
+
+- hosts: exporter-redis
+ roles:
+ - { role: redis_install }
+
+- hosts: exporter-mongodb
+ roles:
+ - { role: mongodb_install }
+
+- hosts: pro-pushgateway
+ roles:
+ - { role: pushgateway_install }
+
+- hosts: pro_pushgateway_client
+ roles:
+ - { role: pushgateway_client_install }
+
+- hosts: filebeat_node
+ roles:
+ - { role: filebeat_install }
+
+- hosts: logstash_node
+ roles:
+ - { role: logstash_install }
+
+- hosts: elasticsearch_node
+ roles:
+ - { role: elasticsearch_install }
+
+- hosts: kibana_node
+ roles:
+ - { role: kibana_install }
+- hosts: exporter-blackbox
+ roles:
+ - { role: blackbox_install }
+- hosts: exporter-scripts
+  roles:
+  - { role: scripts_install }
+- hosts: exporter-kafka
+ roles:
+ - { role: kafka_install }

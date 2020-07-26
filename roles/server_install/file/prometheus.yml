@@ -1,0 +1,46 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+  - job_name: 'prometheus_master'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['prometheus_master:9090']
+  - job_name: 'prometheus_node'
+    scrape_interval: 5s
+    static_configs:
+      - targets: [':prometheus_node9100']
+  - job_name: 'prometheus_tomcat'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['prometheus_tomcat:8100']
+  - job_name: 'pushgateway'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['XXX.XXX.XXX.XXX:9091']
+    honor_labels: true
+  - job_name: 'http_check'
+    metrics_path: /probe
+    params:
+      module: [http_2xx]  
+    static_configs:
+      - targets:
+        - http://192.168.1.101:1234/actuator/info
+
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: cloud-monitor002:9115  
+
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: [ 'prometheus_master:9193' ]
+
+rule_files:
+  - /etc/prometheus/rules/*.rules
+

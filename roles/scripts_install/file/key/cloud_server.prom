@@ -1,0 +1,26 @@
+# HELP Cloud process port, if port < 1 ,cloud server is down
+cloud_process_port_3500 1
+cloud_process_port_3510 1
+cloud_process_port_3520 0
+cloud_process_port_3430 1
+cloud_process_port_3440 1
+cloud_process_port_3400 1
+cloud_process_port_3420 1
+cloud_process_port_3100 1
+cloud_process_port_3450 1
+cloud_process_port_3460 0
+cloud_process_port_3490 1
+cloud_process_port_3410 1
+cloud_process_port_3470 1
+cloud_process_port_3501 1
+cloud_process_port_3511 1
+cloud_process_port_3521 0
+cloud_process_port_3431 1
+cloud_process_port_3441 1
+cloud_process_port_3401 1
+cloud_process_port_3421 1
+cloud_process_port_3101 1
+cloud_process_port_3451 1
+cloud_process_port_3461 0
+cloud_process_port_3411 1
+cloud_process_port_3471 1

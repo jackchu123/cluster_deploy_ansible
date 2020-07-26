@@ -1,0 +1,12 @@
+---
+- hosts: pro-all
+  gather_facts: no
+  roles:
+  - { role: node_install }
+- hosts: pro-server
+ roles:
+ - { role: hosts_file }
+ - { role: server_install }
+ - { role: grafana_install }
+ - { role: alertmanager_install }
+
