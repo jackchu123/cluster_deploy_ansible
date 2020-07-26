@@ -209,10 +209,7 @@ cloud_process_port_3500 1
 ## Grafana 
 - 监控数据展示节点，直接网页访问IP:3000端口即可，展示界面在dashboard-v1.0目录里，Grafana界面导入即可
 
-图展示
-
 - Nginx 访问数据展示
-图展示
 ```
 # Nginx 访问数据展示，是通过修改Nginx日志输出格式，然后通过Filebeat数据收集到elasticsearh，对接Grafana进行数据展示即可
 详细修改请看other目录
@@ -220,7 +217,6 @@ cloud_process_port_3500 1
 
 ## Alertmanager
 - 报警设置通过alertmanager.yml文件完成，然后通过模板mail进行发送邮件
-图展示
 
 ## ELK
 图展示
