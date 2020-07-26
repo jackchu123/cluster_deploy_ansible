@@ -195,4 +195,38 @@ rule_files:
 curl -X POST http://localhost:9090/-/reload
 ```
 
-## 
+- Node 配置
+```
+# Blackbox，网站可用性监控客户端，安装完成后，在Prometheus.yml中配置对应的网址进行监控
+# scripts 是定制化监控服务，需要修改对应Node节点的Node_exporter启动配置，进行单独服务的监控，可配合定制化脚本输出，格式ruxia:
+# HELP Cloud process port, if port < 1 ,cloud server is down
+cloud_process_port_3500 1
+# pushgateway，代理节点即Prometheus Server无法连接各个Agent，需要中转代理节点服务，它收集代理节点的数据并上传到Server
+# pushgateway_client 是被代理节点，即监控数据需要设定Crontab脚本发送到pushgateway节点，从而加入Prometheus监控
+# Mysql,Redis,Mongodb等数据库监控客户端，需要首先创建监控用户，给予权限，再来编辑Service启动文件，才能进行监控
+```
+
+## Grafana 
+- 监控数据展示节点，直接网页访问IP:3000端口即可，展示界面在dashboard-v1.0目录里，Grafana界面导入即可
+
+图展示
+
+- Nginx 访问数据展示
+图展示
+```
+# Nginx 访问数据展示，是通过修改Nginx日志输出格式，然后通过Filebeat数据收集到elasticsearh，对接Grafana进行数据展示即可
+详细修改请看other目录
+```
+
+## Alertmanager
+- 报警设置通过alertmanager.yml文件完成，然后通过模板mail进行发送邮件
+图展示
+
+## ELK
+图展示
+- ELK体系中，通过设置Filebeat的数据收集，然后送往logstash进行切分，最后由Elasticseatch进行检索和Kibana展示
+```
+# Filebeat 收集情况对应yam文件
+# Logstash 切分和索引建立较为重要，请注意
+# Kibana 登录最好设置nginx账户密码登录做安全性
+```
