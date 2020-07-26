@@ -227,6 +227,6 @@ cloud_process_port_3500 1
 - ELK体系中，通过设置Filebeat的数据收集，然后送往logstash进行切分，最后由Elasticseatch进行检索和Kibana展示
 ```
 # Filebeat 收集情况对应yam文件
-# Logstash 切分和索引建立较为重要，请注意
+# Logstash 切分和索引建立较为重要，请注意修改logstash.conf文件
 # Kibana 登录最好设置nginx账户密码登录做安全性
 ```
